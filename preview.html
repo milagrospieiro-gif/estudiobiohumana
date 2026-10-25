@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi parcial | Biología Humana</title>
+<style>
+:root {
+  --bg:#f6f7f5;
+  --surface:#ffffff;
+  --ink:#25352f;
+  --muted:#718078;
+  --green:#2e7055;
+  --soft:#e5f0e9;
+  --line:#e1e7e2;
+  --gold:#f2e6c9;
+  --blue:#e7edf8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.55;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+header{
+  background:#203e32;color:white;padding:30px 20px 25px;
+}
+.header-inner,.container{max-width:920px;margin:auto}
+.eyebrow{
+  text-transform:uppercase;letter-spacing:2px;font-size:11px;
+  font-weight:800;opacity:.8;
+}
+h1{font-size:clamp(27px,5vw,40px);line-height:1.1;margin:12px 0}
+header p{color:#e1ebe4;max-width:600px;margin-bottom:20px}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.pill{
+  border:1px solid #719080;border-radius:30px;padding:5px 10px;
+  font-size:12px;white-space:nowrap;
+}
+.container{padding:20px 15px 50px}
+.progress-card{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:18px;padding:20px;margin-top:-3px;
+}
+.progress-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.progress-head strong{font-size:25px}
+.muted{color:var(--muted);font-size:13px}
+.track{height:9px;background:#e9eee9;border-radius:20px;overflow:hidden;margin:13px 0}
+.bar{height:100%;width:0;background:var(--green);transition:width .25s}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.stat{background:#f7f9f7;padding:12px;border-radius:12px}
+.stat b{display:block;font-size:20px}
+.stat span{font-size:12px;color:var(--muted)}
+.notice{
+  background:var(--gold);border-radius:14px;padding:15px;
+  margin:18px 0;font-size:14px;
+}
+.section-head{margin:28px 0 12px}
+.section-head h2{font-size:21px;margin:0}
+.section-head p{margin:4px 0;color:var(--muted);font-size:13px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.filter{
+  border:1px solid var(--line);border-radius:30px;background:white;
+  padding:8px 12px;font-size:12px;color:var(--ink);
+}
+.filter.active{background:var(--green);color:white;border-color:var(--green)}
+.module{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:16px;margin:12px 0;overflow:hidden;
+}
+.module.done{border-color:#92b9a1}
+.module summary{
+  list-style:none;display:flex;align-items:center;gap:13px;
+  padding:17px;cursor:pointer;
+}
+.module summary::-webkit-details-marker{display:none}
+.number{
+  width:38px;height:38px;flex-shrink:0;border-radius:12px;
+  display:grid;place-items:center;background:var(--soft);
+  color:var(--green);font-weight:800;
+}
+.module.done .number{background:var(--green);color:white}
+.module-title{font-weight:750;font-size:15px}
+.module-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.arrow{margin-left:auto;color:var(--muted)}
+.module-body{border-top:1px solid var(--line);padding:18px}
+.module-body h3{font-size:16px;margin:20px 0 8px}
+.module-body h3:first-child{margin-top:0}
+.module-body p,.module-body li{font-size:14px}
+.module-body ul{padding-left:20px}
+.definition{
+  background:#f6f9f6;border-left:3px solid var(--green);
+  border-radius:0 10px 10px 0;padding:13px;font-size:14px;
+}
+.method{
+  display:flex;align-items:flex-start;gap:10px;padding:12px 0;
+  border-bottom:1px solid #edf0ed;
+}
+.method:last-child{border-bottom:0}
+.method input{
+  width:19px;height:19px;flex-shrink:0;margin-top:3px;
+  accent-color:var(--green);
+}
+.method label{font-size:14px;cursor:pointer;flex:1}
+.method small{display:block;color:var(--muted);margin-top:3px;font-size:12px}
+.method:has(input:checked) label{text-decoration:line-through;color:var(--muted)}
+.quiz{
+  margin-top:18px;padding:15px;background:var(--blue);
+  border-radius:12px;
+}
+.quiz-question{font-size:14px;font-weight:650;margin:13px 0 5px}
+.answer{
+  width:100%;text-align:left;background:white;border:1px solid #d9e1ef;
+  border-radius:9px;padding:10px;margin:4px 0;font-size:13px;
+}
+.answer.correct{border-color:#43825d;background:#e4f3e8}
+.answer.wrong{border-color:#bc6666;background:#fbe9e9}
+.feedback{font-size:13px;margin-top:5px}
+.complete{
+  margin-top:18px;padding:15px;background:#f5f8f5;
+  border-radius:12px;display:flex;align-items:flex-start;gap:10px;
+}
+.complete input{width:20px;height:20px;accent-color:var(--green);margin-top:3px}
+.complete label{font-size:14px;font-weight:650}
+.complete small{display:block;font-weight:400;color:var(--muted);margin-top:3px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.btn{
+  border:1px solid var(--line);border-radius:10px;background:white;
+  padding:10px 14px;font-size:13px;color:var(--ink);
+}
+.btn.primary{background:var(--green);border-color:var(--green);color:white}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+.hidden{display:none!important}
+@media(max-width:500px){
+  header{padding:24px 17px}
+  .container{padding:15px 11px 35px}
+  .stats{gap:6px}
+  .stat{padding:10px}
+  .module-body{padding:14px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="topline">
+      <span class="eyebrow">Preparación de exámenes</span>
+      <span class="pill">Unidad 4</span>
+    </div>
+    <h1>Biología Humana<br>y Salud</h1>
+    <p>Tu recorrido de estudio para el parcial. Comprendé, practicá,
+    recuperá la información y avanzá tema por tema.</p>
+    <div class="pill">Objetivo: llegar preparada al examen</div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="progress-card">
+    <div class="progress-head">
+      <div>
+        <div class="muted">TU PROGRESO GENERAL</div>
+        <strong id="percent">0%</strong>
+      </div>
+      <span id="progressText" class="muted">0 de 9 módulos</span>
+    </div>
+    <div class="track"><div class="bar" id="bar"></div></div>
+    <div class="stats">
+      <div class="stat"><b id="tasksDone">0</b><span>Tareas hechas</span></div>
+      <div class="stat"><b id="tasksTotal">0</b><span>Tareas totales</span></div>
+      <div class="stat"><b id="modulesDone">0</b><span>Módulos listos</span></div>
+    </div>
+  </section>
+
+  <div class="notice">
+    <strong>Cómo usar esta app</strong><br>
+    En cada módulo, leé la guía breve y realizá las actividades en orden.
+    Marcá una casilla solo cuando hayas hecho el ejercicio sin limitarte
+    a leerlo. Completá la autoevaluación y la comprobación final antes
+    de avanzar. Si no podés explicar un concepto sin mirar, todavía
+    necesitás practicarlo.
+  </div>
+
+  <div class="section-head">
+    <h2>Tu recorrido de estudio</h2>
+    <p>Ordenado por prioridad para aprovechar el tiempo disponible.</p>
+  </div>
+
+  <div class="filters">
+    <button class="filter active" data-filter="all">Todos</button>
+    <button class="filter" data-filter="pending">Pendientes</button>
+    <button class="filter" data-filter="done">Completados</button>
+  </div>
+
+  <div id="modules"></div>
+
+  <div class="actions">
+    <button class="btn primary" id="openNext">Continuar con el siguiente módulo →</button>
+    <button class="btn" id="export">Descargar mi progreso</button>
+    <button class="btn" id="reset">Reiniciar progreso</button>
+  </div>
+
+  <div class="notice">
+    <strong>Antes del examen</strong><br>
+    No te evalúes por cuántas páginas leíste. Evaluáte por cuántos
+    mecanismos podés explicar, cuántas diferencias podés establecer y
+    cuántas preguntas podés contestar sin consultar tus apuntes.
+    Esta guía prioriza los contenidos centrales del programa, pero no
+    garantiza una calificación determinada.
+  </div>
+</main>
+<footer>Biología Humana y Salud · Guía personal de estudio</footer>
+
+<script>
+const modules = [
+{
+ title:"Organización del sistema nervioso",
+ sub:"Prioridad máxima · Base para todos los temas siguientes",
+ guide:`El sistema nervioso se organiza anatómicamente en sistema nervioso central (SNC) y sistema nervioso periférico (SNP). El SNC comprende el encéfalo y la médula espinal. El SNP incluye nervios y ganglios que conectan el SNC con el resto del organismo.
+
+Funcionalmente, las vías sensitivas llevan información desde los receptores hacia el SNC. Las vías motoras llevan órdenes desde el SNC hacia los efectores.
+
+El sistema somático se relaciona con la sensibilidad somática y el control de los músculos esqueléticos. El sistema autónomo regula principalmente músculo liso, músculo cardíaco y glándulas. El sistema entérico coordina funciones del tubo digestivo y mantiene conexiones con el sistema autónomo.`,
+ bullets:[
+  "SNC: encéfalo y médula espinal.",
+  "SNP: nervios y ganglios fuera del SNC.",
+  "Sensitivo o aferente: lleva información hacia el SNC.",
+  "Motor o eferente: lleva señales hacia los efectores.",
+  "Somático: músculos esqueléticos.",
+  "Autónomo: músculo liso, músculo cardíaco y glándulas.",
+  "Entérico: regulación local de la actividad digestiva."
+ ],
+ tasks:[
+  ["Recuperación activa","Tapá la guía y dibujá un esquema desde sistema nervioso hasta sus divisiones."],
+  ["Explicación oral","Explicá la diferencia entre SNC y SNP y después entre somático y autónomo."],
+  ["Cuadro comparativo","Escribí qué información lleva cada vía y qué efectores regula cada división."],
+  ["Aplicación","Clasificá: retirar la mano del calor, sentir frío, acelerar el corazón y aumentar la motilidad intestinal."]
+ ],
+ quiz:[
+  {q:"¿Qué estructuras forman el SNC?",a:["Encéfalo y médula espinal","Nervios y ganglios","Solo los nervios craneales"],correct:0,why:"El SNC está formado por encéfalo y médula espinal."},
+  {q:"¿Qué división regula principalmente músculo cardíaco y glándulas?",a:["Sistema somático","Sistema autónomo","Solo el sistema entérico"],correct:1,why:"El sistema autónomo regula músculo liso, cardíaco y glándulas."}
+ ]
+},
+{
+ title:"Neurona, células gliales e impulso nervioso",
+ sub:"Prioridad máxima · Comprender el mecanismo",
+ guide:`La neurona es una célula especializada en recibir, integrar y transmitir información. Las dendritas reciben señales, el soma contiene el núcleo y participa en la integración, y el axón conduce el potencial de acción hacia sus terminales.
+
+En reposo existe una diferencia de potencial eléctrico entre el interior y el exterior de la membrana. Cuando un estímulo alcanza el umbral, se abren canales de Na⁺ dependientes de voltaje y el sodio entra: se produce la despolarización. Luego se inactivan esos canales y aumenta la salida de K⁺, favoreciendo la repolarización. Los períodos refractarios contribuyen a que la señal se propague de manera ordenada.
+
+La mielina permite una conducción más rápida. En los axones mielinizados, el potencial de acción se regenera en los nodos de Ranvier, en un proceso llamado conducción saltatoria. Las células gliales cumplen funciones de soporte, protección, nutrición y mielinización, entre otras.`,
+ bullets:[
+  "Dendritas: reciben señales.",
+  "Soma: contiene el núcleo e integra información.",
+  "Axón: conduce el potencial de acción.",
+  "Despolarización: entrada de Na⁺.",
+  "Repolarización: salida de K⁺.",
+  "Mielina: aislamiento que favorece la velocidad de conducción.",
+  "Glía: soporte y otras funciones esenciales para el tejido nervioso."
+ ],
+ tasks:[
+  ["Dibujo de memoria","Dibujá una neurona, etiquetá sus partes y señalá la dirección de la información."],
+  ["Secuencia causal","Escribí: reposo → umbral → despolarización → repolarización → recuperación."],
+  ["Explicación oral","Explicá qué ocurre con el Na⁺ y el K⁺ durante el potencial de acción."],
+  ["Recuperación activa","Sin mirar, explicá por qué la mielina acelera la conducción."]
+ ],
+ quiz:[
+  {q:"¿Qué ion entra principalmente durante la fase ascendente del potencial de acción?",a:["K⁺","Na⁺","Cl⁻ exclusivamente"],correct:1,why:"La apertura de canales de Na⁺ dependientes de voltaje provoca la despolarización."},
+  {q:"¿Cuál es una función de la mielina?",a:["Producir hormonas tiroideas","Acelerar la conducción nerviosa","Reemplazar el núcleo neuronal"],correct:1,why:"La mielina permite una conducción más rápida y, en axones mielinizados, saltatoria."}
+ ]
+},
+{
+ title:"Sinapsis y neurotransmisores",
+ sub:"Prioridad máxima · Comunicación entre células",
+ guide:`La sinapsis es una zona de comunicación entre neuronas o entre una neurona y una célula efectora.
+
+En una sinapsis química, el potencial de acción alcanza la terminal presináptica, se abren canales de Ca²⁺ y la entrada de calcio favorece la liberación de neurotransmisores por exocitosis. Estos atraviesan la hendidura sináptica y se unen a receptores postsinápticos. La respuesta depende del neurotransmisor, del receptor y de la célula.
+
+En la sinapsis eléctrica, las células se comunican mediante uniones comunicantes que permiten el paso directo de corriente iónica. La transmisión suele ser muy rápida. No confundas el potencial de acción que se propaga por el axón con la transmisión sináptica entre células.`,
+ bullets:[
+  "Presináptica: libera el neurotransmisor.",
+  "Hendidura sináptica: espacio entre las células.",
+  "Postsináptica: presenta receptores.",
+  "Ca²⁺: participa en la liberación de vesículas en la sinapsis química.",
+  "Sinapsis química: utiliza neurotransmisores.",
+  "Sinapsis eléctrica: comunica células mediante uniones directas."
+ ],
+ tasks:[
+  ["Secuencia de pasos","Ordená: potencial de acción, entrada de Ca²⁺, exocitosis, unión al receptor y respuesta."],
+  ["Dibujo esquemático","Dibujá una sinapsis química y señalá sus cinco elementos principales."],
+  ["Cuadro comparativo","Compará sinapsis química y eléctrica en mecanismo, velocidad y dirección."],
+  ["Explicación oral","Explicá cómo una señal eléctrica puede provocar una respuesta en otra célula."]
+ ],
+ quiz:[
+  {q:"¿Qué ion participa en la liberación de neurotransmisores?",a:["Calcio","Hierro exclusivamente","Yodo"],correct:0,why:"La entrada de Ca²⁺ en la terminal presináptica favorece la exocitosis."},
+  {q:"¿Qué distingue a la sinapsis química?",a:["No utiliza receptores","Utiliza neurotransmisores liberados en una hendidura","Solo existe en el músculo cardíaco"],correct:1,why:"El neurotransmisor se libera, difunde y se une a receptores."}
+ ]
+},
+{
+ title:"Médula espinal y arco reflejo",
+ sub:"Prioridad alta · Vías sensitivas y motoras",
+ guide:`La médula espinal comunica el encéfalo con gran parte del organismo y participa en la integración de reflejos. La sustancia gris se organiza centralmente y la sustancia blanca contiene principalmente axones agrupados en tractos.
+
+En los nervios espinales, la raíz dorsal conduce información sensitiva hacia la médula y la raíz ventral conduce información motora hacia los efectores.
+
+Un arco reflejo es una vía que permite una respuesta rápida ante un estímulo. Sus componentes básicos son receptor, neurona sensitiva, centro integrador, neurona motora y efector. En un reflejo de retirada, por ejemplo, la información dolorosa llega a la médula y se organiza una respuesta motora; el procesamiento cerebral también contribuye a la percepción consciente del dolor.`,
+ bullets:[
+  "Raíz dorsal: entrada sensitiva.",
+  "Raíz ventral: salida motora.",
+  "Sustancia gris: cuerpos neuronales, dendritas y sinapsis, entre otros componentes.",
+  "Sustancia blanca: principalmente axones agrupados en tractos.",
+  "Arco reflejo: receptor → vía sensitiva → integración → vía motora → efector.",
+  "Las meninges y el líquido cefalorraquídeo contribuyen a la protección del SNC."
+ ],
+ tasks:[
+  ["Dibujo","Representá la médula espinal en corte y ubicá sustancia gris, blanca y raíces."],
+  ["Cadena causal","Describí el recorrido de la información cuando tocás algo caliente."],
+  ["Recuperación activa","Explicá por qué un reflejo puede organizarse en la médula sin esperar una orden consciente."],
+  ["Comparación","Diferenciá raíz dorsal y raíz ventral sin mirar la guía."]
+ ],
+ quiz:[
+  {q:"¿Qué raíz conduce información sensitiva hacia la médula?",a:["Ventral","Dorsal","Ambas exclusivamente en dirección motora"],correct:1,why:"La raíz dorsal conduce aferencias sensitivas."},
+  {q:"¿Cuál es el orden general de un arco reflejo?",a:["Efector, receptor, integración, neurona sensitiva","Receptor, vía sensitiva, integración, vía motora, efector","Cerebro, glándula, receptor"],correct:1,why:"Ese es el recorrido básico de un arco reflejo."}
+ ]
+},
+{
+ title:"Encéfalo, percepción, movimiento y memoria",
+ sub:"Prioridad alta · Estructuras y funciones",
+ guide:`El encéfalo integra información sensitiva y motora y participa en la regulación de funciones vitales, la conducta y la cognición.
+
+El tronco encefálico —mesencéfalo, puente y bulbo raquídeo— interviene en vías de comunicación y funciones esenciales. El cerebelo participa en la coordinación y precisión de los movimientos y el equilibrio. El tálamo funciona como relevo de gran parte de la información sensitiva hacia la corteza. El hipotálamo contribuye a la homeostasis y a la regulación endocrina.
+
+El cerebro y la corteza cerebral participan en la percepción consciente, el movimiento voluntario y funciones como el lenguaje y el pensamiento. Las áreas de asociación integran información. El aprendizaje y la memoria dependen de redes distribuidas y de cambios de plasticidad neuronal; no existe una única estructura responsable de todas las formas de memoria.`,
+ bullets:[
+  "Tronco encefálico: funciones vitales y vías de comunicación.",
+  "Cerebelo: coordinación, precisión y equilibrio.",
+  "Tálamo: relevo de gran parte de la información sensitiva.",
+  "Hipotálamo: homeostasis e integración neuroendocrina.",
+  "Corteza motora: participación en el movimiento voluntario.",
+  "Áreas sensitivas y de asociación: procesamiento e integración de información.",
+  "Plasticidad neuronal: cambios que contribuyen al aprendizaje y la memoria."
+ ],
+ tasks:[
+  ["Mapa estructura-función","Dibujá cinco estructuras encefálicas y escribí una función principal de cada una."],
+  ["Recuperación activa","Nombrá las estructuras a partir de sus funciones, sin consultar el texto."],
+  ["Explicación oral","Explicá cómo se transforma una información sensorial en una respuesta motora."],
+  ["Aplicación","Relacioná una lesión cerebelosa con dificultades de coordinación, sin atribuirle todas las funciones motoras."]
+ ],
+ quiz:[
+  {q:"¿Qué estructura es especialmente importante para la coordinación y precisión de los movimientos?",a:["Cerebelo","Hipófisis","Médula suprarrenal"],correct:0,why:"El cerebelo participa en la coordinación y precisión motora."},
+  {q:"¿Qué estructura conecta la regulación nerviosa con la endocrina?",a:["Hipotálamo","Corteza renal","Páncreas exocrino exclusivamente"],correct:0,why:"El hipotálamo es un nexo central entre los sistemas nervioso y endocrino."}
+ ]
+},
+{
+ title:"Sistema somático, autónomo y entérico",
+ sub:"Prioridad máxima · Simpático vs. parasimpático",
+ guide:`El sistema somático incluye vías sensitivas y neuronas motoras que inervan músculo esquelético. La vía motora somática utiliza una neurona que conecta el SNC con el músculo.
+
+Las vías motoras autónomas suelen incluir dos neuronas consecutivas: una preganglionar, cuyo cuerpo está en el SNC, y una posganglionar, cuyo cuerpo está en un ganglio autónomo. Sus efectores incluyen músculo liso, músculo cardíaco y glándulas.
+
+El simpático tiene origen toracolumbar y suele preparar al organismo para situaciones de alerta. Sus ganglios están generalmente cerca de la médula, por lo que las fibras preganglionares suelen ser cortas y las posganglionares largas. El parasimpático tiene origen craneosacro; sus ganglios están cerca o dentro del órgano efector, por lo que sus fibras preganglionares suelen ser largas y las posganglionares cortas.
+
+Ambos sistemas actúan de manera complementaria en la regulación de la homeostasis. El sistema entérico coordina circuitos locales digestivos y recibe influencia del autónomo.`,
+ bullets:[
+  "Somático: músculo esquelético; vía motora de una neurona.",
+  "Autónomo: músculo liso, cardíaco y glándulas.",
+  "Simpático: toracolumbar, alerta; ganglios cerca de la médula.",
+  "Parasimpático: craneosacro, reposo y digestión; ganglios cerca del efector.",
+  "Vía autónoma: neurona preganglionar → ganglio → neurona posganglionar.",
+  "Entérico: circuitos locales que regulan motilidad y secreciones digestivas."
+ ],
+ tasks:[
+  ["Cuadro comparativo","Compará origen, función general, ubicación de ganglios y longitud de las fibras."],
+  ["Dibujo de vías","Representá una vía somática y otra autónoma. Dibujá sus neuronas y efectores."],
+  ["Caso práctico","Explicá qué cambios esperás en alerta y en reposo en frecuencia cardíaca y actividad digestiva."],
+  ["Recuperación activa","Explicá por qué simpático y parasimpático no son simplemente sistemas 'buenos' y 'malos'."]
+ ],
+ quiz:[
+  {q:"¿Dónde se encuentran generalmente los ganglios parasimpáticos?",a:["Cerca o dentro del órgano efector","Siempre dentro de la corteza cerebral","Exclusivamente junto a la médula espinal"],correct:0,why:"Su ubicación explica las fibras preganglionares largas y posganglionares cortas."},
+  {q:"¿Cuántas neuronas forman habitualmente la vía motora autónoma?",a:["Una","Dos: preganglionar y posganglionar","Cinco obligatoriamente"],correct:1,why:"La vía autónoma suele organizarse en dos neuronas consecutivas."}
+ ]
+},
+{
+ title:"Sistema endocrino e interacción hormonal",
+ sub:"Prioridad máxima · Hormonas y homeostasis",
+ guide:`El sistema nervioso transmite información mediante impulsos y neurotransmisores, generalmente con respuestas rápidas y breves. El sistema endocrino libera hormonas al medio interno y, habitualmente, a la sangre; sus efectos pueden comenzar más lentamente y durar más tiempo.
+
+Las glándulas endocrinas liberan hormonas sin conductos. Las exocrinas vierten sus productos a conductos. El páncreas es un órgano con funciones endocrinas y exocrinas.
+
+Una hormona actúa sobre células diana que tienen receptores adecuados. Las hormonas hidrosolubles suelen unirse a receptores de membrana y activar segundos mensajeros. Las liposolubles pueden atravesar la membrana y unirse a receptores intracelulares. La secreción hormonal se regula por señales nerviosas, cambios químicos y otras hormonas. La retroalimentación negativa reduce el estímulo inicial y ayuda a mantener la homeostasis.`,
+ bullets:[
+  "Endocrino: hormonas transportadas generalmente por sangre.",
+  "Exocrino: secreciones liberadas por conductos.",
+  "Célula diana: posee receptores adecuados para una señal.",
+  "Hormona hidrosoluble: receptor de membrana y posible segundo mensajero.",
+  "Hormona liposoluble: receptor intracelular en el mecanismo clásico.",
+  "Retroalimentación negativa: la respuesta disminuye el estímulo inicial.",
+  "Páncreas: función endocrina y exocrina."
+ ],
+ tasks:[
+  ["Cuadro comparativo","Compará sistema nervioso y endocrino por vía de comunicación, mensajeros, velocidad y duración."],
+  ["Dibujo","Representá una hormona que actúa en un receptor de membrana y otra que actúa en un receptor intracelular."],
+  ["Explicación oral","Explicá qué es la retroalimentación negativa y por qué estabiliza una variable."],
+  ["Aplicación","Explicá por qué una hormona no produce necesariamente el mismo efecto en todas las células."]
+ ],
+ quiz:[
+  {q:"¿Qué necesita una célula para responder específicamente a una hormona?",a:["Un receptor adecuado","Un conducto exocrino propio","Un axón largo obligatoriamente"],correct:0,why:"La respuesta depende de la presencia de receptores adecuados y de la maquinaria celular."},
+  {q:"¿Qué caracteriza a la retroalimentación negativa?",a:["Amplifica siempre el estímulo inicial","Reduce el estímulo que originó la respuesta","Impide toda secreción hormonal"],correct:1,why:"La respuesta contrarresta el cambio inicial y contribuye a la homeostasis."}
+ ]
+},
+{
+ title:"Hipotálamo, hipófisis y hormonas principales",
+ sub:"Prioridad máxima · Eje neuroendocrino",
+ guide:`El hipotálamo integra información y regula funciones homeostáticas. Controla la adenohipófisis mediante hormonas liberadoras e inhibidoras que llegan por el sistema porta hipofisario. La adenohipófisis sintetiza y secreta GH, TSH, ACTH, FSH, LH y prolactina, entre otras.
+
+La neurohipófisis almacena y libera ADH y oxitocina, sintetizadas en neuronas del hipotálamo. La ADH favorece la conservación de agua en los riñones. La oxitocina participa en las contracciones uterinas y en la eyección de leche.
+
+Las hormonas trópicas regulan otras glándulas endocrinas. Por ejemplo, TSH estimula la tiroides y ACTH estimula la corteza suprarrenal. La retroalimentación negativa por las hormonas de las glándulas diana contribuye a regular el eje.`,
+ bullets:[
+  "Hipotálamo: integra señales nerviosas y endocrinas.",
+  "Adenohipófisis: GH, TSH, ACTH, FSH, LH y prolactina.",
+  "Neurohipófisis: almacena y libera ADH y oxitocina hipotalámicas.",
+  "TSH → tiroides; ACTH → corteza suprarrenal.",
+  "FSH y LH: funciones reproductivas.",
+  "GH: crecimiento y metabolismo; prolactina: producción de leche.",
+  "ADH: conservación de agua; oxitocina: contracción uterina y eyección de leche."
+ ],
+ tasks:[
+  ["Tabla de hormonas","Escribí hormona, lugar de liberación y función principal sin copiar la tabla de la guía."],
+  ["Dibujo del eje","Representá hipotálamo → sistema porta → adenohipófisis → glándula diana → retroalimentación."],
+  ["Comparación","Explicá las diferencias entre adenohipófisis y neurohipófisis."],
+  ["Recuperación activa","Recordá qué hormona actúa sobre la tiroides, cuál sobre la corteza suprarrenal y cuál conserva agua."]
+ ],
+ quiz:[
+  {q:"¿Qué afirmación describe a la neurohipófisis?",a:["Sintetiza todas las hormonas hipofisarias","Almacena y libera ADH y oxitocina producidas en el hipotálamo","Produce insulina"],correct:1,why:"ADH y oxitocina se sintetizan en el hipotálamo y se liberan desde la neurohipófisis."},
+  {q:"¿Qué hormona estimula la tiroides?",a:["TSH","ADH","Insulina"],correct:0,why:"La TSH estimula la actividad de la glándula tiroides."}
+ ]
+},
+{
+ title:"Glucemia, diabetes y tiroides",
+ sub:"Prioridad máxima · Aplicación fisiológica",
+ guide:`La glucemia es la concentración de glucosa en la sangre. En el páncreas endocrino, las células beta secretan insulina y las células alfa secretan glucagón.
+
+Cuando la glucemia aumenta, la insulina favorece la captación y utilización de glucosa en tejidos sensibles y el almacenamiento de energía, por ejemplo como glucógeno. Cuando la glucemia disminuye, el glucagón favorece la liberación de glucosa por el hígado. Ambas hormonas participan en la regulación homeostática de la glucemia.
+
+En la diabetes tipo 1 existe destrucción de las células beta y deficiencia marcada de insulina. En la tipo 2 hay resistencia a la insulina y puede desarrollarse una alteración progresiva de la secreción. La hiperglucemia crónica puede dañar vasos sanguíneos, riñones, retina y nervios.
+
+La tiroides produce T4 y T3, que influyen en el metabolismo. La TSH regula su producción mediante un eje con retroalimentación negativa. El hipotiroidismo consiste en una producción o disponibilidad insuficiente de hormonas tiroideas y puede enlentecer diversas funciones corporales.`,
+ bullets:[
+  "Células beta pancreáticas → insulina → contribuye a disminuir la glucemia.",
+  "Células alfa pancreáticas → glucagón → contribuye a aumentar la glucemia.",
+  "Insulina: favorece uso y almacenamiento de nutrientes.",
+  "Glucagón: favorece la movilización de glucosa hepática.",
+  "Diabetes tipo 1: deficiencia marcada de insulina por destrucción de células beta.",
+  "Diabetes tipo 2: resistencia a la insulina y disfunción progresiva de células beta.",
+  "T3 y T4: regulación del metabolismo; TSH estimula la tiroides.",
+  "Hipotiroidismo: insuficiencia de hormonas tiroideas."
+ ],
+ tasks:[
+  ["Diagrama de regulación","Dibujá dos situaciones: después de comer y durante el ayuno. Incluí glucemia, hormona, páncreas e hígado."],
+  ["Cuadro comparativo","Diferenciá diabetes tipo 1 y tipo 2 por mecanismo principal."],
+  ["Explicación oral","Explicá cómo actúan insulina y glucagón como reguladores antagónicos."],
+  ["Caso de aplicación","Explicá por qué una hiperglucemia sostenida puede producir complicaciones en distintos órganos."],
+  ["Recuperación activa","Describí el eje hipotálamo-hipófisis-tiroides y qué sucede cuando aumentan las hormonas tiroideas."]
+ ],
+ quiz:[
+  {q:"¿Qué hormona favorece la disminución de la glucemia?",a:["Glucagón","Insulina","TSH"],correct:1,why:"La insulina favorece la utilización y el almacenamiento de glucosa."},
+  {q:"¿Cuál es un mecanismo central de la diabetes tipo 2?",a:["Resistencia a la insulina","Ausencia de toda hormona tiroidea","Exceso de ADH como única causa"],correct:0,why:"La resistencia a la insulina es un mecanismo central de la diabetes tipo 2."},
+  {q:"¿Qué hormona estimula la tiroides?",a:["TSH","ACTH","Prolactina"],correct:0,why:"La TSH estimula la glándula tiroides."}
+ ]
+},
+{
+ title:"Integración, suprarrenales y neurodivergencia",
+ sub:"Repaso final · Conectar los conceptos",
+ guide:`La respuesta al estrés integra sistemas nervioso y endocrino. El sistema simpático puede activar respuestas rápidas y estimular la médula suprarrenal para liberar adrenalina y noradrenalina. El eje hipotálamo-hipófisis-suprarrenal participa en respuestas hormonales más sostenidas; ACTH estimula la corteza suprarrenal para producir cortisol.
+
+La corteza suprarrenal produce, entre otras hormonas, aldosterona y cortisol. La aldosterona contribuye a regular el sodio, el potasio y el volumen extracelular; el cortisol participa en el metabolismo y en la respuesta al estrés.
+
+El programa también incluye neurodivergencia. Es un concepto que reconoce la diversidad en el funcionamiento neurológico, la percepción, el aprendizaje y la conducta. No debe utilizarse como sinónimo de incapacidad ni para asumir que todas las personas con un mismo diagnóstico tienen las mismas necesidades. Para el parcial, relacioná el concepto con la diversidad de experiencias de percepción, movimiento y aprendizaje, de acuerdo con lo trabajado en clase.`,
+ bullets:[
+  "Simpático y médula suprarrenal: respuesta rápida con liberación de catecolaminas.",
+  "Eje hipotálamo-hipófisis-suprarrenal: participación del cortisol en la respuesta al estrés.",
+  "ACTH: estimula la corteza suprarrenal.",
+  "Aldosterona: balance de sodio, potasio y volumen.",
+  "Cortisol: metabolismo y respuesta al estrés.",
+  "Neurodivergencia: diversidad del funcionamiento neurológico y de las experiencias individuales."
+ ],
+ tasks:[
+  ["Mapa integrador","Uní hipotálamo, hipófisis, ACTH, suprarrenales y cortisol con flechas."],
+  ["Explicación oral","Compará la respuesta simpática rápida con el eje hormonal del estrés."],
+  ["Recuperación activa","Recordá la función principal de cortisol, aldosterona, adrenalina y noradrenalina."],
+  ["Vinculación con el programa","Explicá qué significa neurodivergencia y cómo se relaciona con percepción, aprendizaje y movimiento."],
+  ["Repaso final","Respondé las preguntas generales del final sin consultar las presentaciones."]
+ ],
+ quiz:[
+  {q:"¿Qué hormona hipofisaria estimula la corteza suprarrenal?",a:["ACTH","TSH","ADH"],correct:0,why:"La ACTH estimula la corteza suprarrenal."},
+  {q:"¿Qué describe mejor la neurodivergencia?",a:["Que todas las personas aprenden exactamente igual","La diversidad en el funcionamiento neurológico y las experiencias individuales","Una única enfermedad con los mismos síntomas en todas las personas"],correct:1,why:"El concepto reconoce la diversidad del funcionamiento neurológico, sin asumir que todas las personas son iguales."}
+ ]
+}
+];
+
+const STORE="bio_humana_parcial_v1";
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(STORE)||"{}")}catch(e){saved={}}
+let filter="all";
+
+function persist(){
+  localStorage.setItem(STORE,JSON.stringify(saved));
+  updateProgress();
+}
+function getTaskCount(i){
+  const m=modules[i];
+  return m.tasks.length + m.quiz.length + 1;
+}
+function isDone(i){
+  const total=getTaskCount(i);
+  const checks=saved[i]?.checks||{};
+  return Object.keys(checks).filter(k=>checks[k]).length>=total;
+}
+function taskChecked(i,key){return !!saved[i]?.checks?.[key]}
+function setTask(i,key,value){
+  if(!saved[i])saved[i]={checks:{},answers:{}};
+  if(!saved[i].checks)saved[i].checks={};
+  saved[i].checks[key]=value;
+  persist();
+  renderStatus(i);
+}
+function renderStatus(i){
+  const el=document.getElementById("module-"+i);
+  if(!el)return;
+  el.classList.toggle("done",isDone(i));
+  const status=el.querySelector(".module-sub");
+  if(status){
+    status.textContent=isDone(i)?"✓ Módulo completado":modules[i].sub;
+  }
+  updateFilterVisibility();
+}
+function updateProgress(){
+  let total=0,done=0,finished=0;
+  modules.forEach((m,i)=>{
+    total+=getTaskCount(i);
+    const checks=saved[i]?.checks||{};
+    done+=Object.values(checks).filter(Boolean).length;
+    if(isDone(i))finished++;
+  });
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById("percent").textContent=pct+"%";
+  document.getElementById("bar").style.width=pct+"%";
+  document.getElementById("tasksDone").textContent=done;
+  document.getElementById("tasksTotal").textContent=total;
+  document.getElementById("modulesDone").textContent=finished;
+  document.getElementById("progressText").textContent=finished+" de "+modules.length+" módulos";
+}
+function checkRow(i,key,label,desc){
+  const id=`c-${i}-${key}`;
+  return `<div class="method">
+    <input type="checkbox" id="${id}" data-i="${i}" data-key="${key}" ${taskChecked(i,key)?"checked":""}>
+    <label for="${id}">${label}<small>${desc}</small></label>
+  </div>`;
+}
+function renderModule(m,i){
+  const bullets=m.bullets.map(b=>`<li>${b}</li>`).join("");
+  const tasks=m.tasks.map((t,j)=>checkRow(i,"t"+j,t[0],t[1])).join("");
+  const quiz=m.quiz.map((q,j)=>{
+    const chosen=saved[i]?.answers?.[j];
+    const buttons=q.a.map((a,k)=>{
+      let cls="";
+      if(chosen!==undefined && k===q.correct)cls="correct";
+      else if(chosen===k && k!==q.correct)cls="wrong";
+      return `<button class="answer ${cls}" data-quiz="${i}-${j}-${k}">${String.fromCharCode(65+k)}. ${a}</button>`;
+    }).join("");
+    const feedback=chosen===undefined?"":`<div class="feedback">${chosen===q.correct?"✓ Correcto. ":"✗ Revisá este concepto. "}${q.why}</div>`;
+    return `<div>
+      <div class="quiz-question">${j+1}. ${q.q}</div>
+      <div>${buttons}</div>${feedback}
+    </div>`;
+  }).join("");
+  const quizChecks=m.quiz.map((q,j)=>checkRow(i,"q"+j,"Corregí la pregunta "+(j+1),"Marcá cuando hayas respondido y comprendido la explicación.")).join("");
+  const allDone=isDone(i);
+  return `<details class="module ${allDone?"done":""}" id="module-${i}">
+    <summary>
+      <div class="number">${allDone?"✓":String(i+1).padStart(2,"0")}</div>
+      <div style="flex:1">
+        <div class="module-title">${m.title}</div>
+        <div class="module-sub">${allDone?"✓ Módulo completado":m.sub}</div>
+      </div>
+      <span class="arrow">⌄</span>
+    </summary>
+    <div class="module-body">
+      <h3>📖 Guía rápida</h3>
+      <div class="definition">${m.guide.replace(/\n\n/g,"<br><br>")}</div>
+      <h3>Lo que tenés que recordar</h3>
+      <ul>${bullets}</ul>
+      <h3>🧠 Métodos de estudio</h3>
+      <p class="muted">Hacé cada ejercicio antes de marcarlo como terminado.</p>
+      ${tasks}
+      <h3>✍️ Autoevaluación</h3>
+      <div class="quiz">${quiz}
+        ${quiz}
+      </div>
+      <h3>Registrar la autoevaluación</h3>
+      ${quizChecks}
+      <div class="complete">
+        <input type="checkbox" id="final-${i}" data-i="${i}" data-key="final" ${taskChecked(i,"final")?"checked":""}>
+        <label for="final-${i}">Puedo explicar este tema sin mirar la guía.
+          <small>Marcá esta casilla únicamente cuando hayas hecho los ejercicios y puedas recuperar las ideas principales.</small>
+        </label>
+      </div>
+      <div class="actions">
+        <button class="btn primary next-module" data-next="${i}">Terminé: ir al siguiente tema →</button>
+      </div>
+      <p class="muted" id="status-${i}">${allDone?"¡Módulo completado!": "Al completar todas las tareas, el módulo quedará marcado como terminado."}</p>
+    </div>
+  </details>`;
+}
+function render(){
+  document.getElementById("modules").innerHTML=modules.map(renderModule).join("");
+  document.querySelectorAll("[data-i][data-key]").forEach(input=>{
+    input.addEventListener("change",()=>{
+      setTask(Number(input.dataset.i),input.dataset.key,input.checked);
+      const i=Number(input.dataset.i);
+      const status=document.getElementById("status-"+i);
+      if(status)status.textContent=isDone(i)
+        ?"¡Módulo completado! Ya podés avanzar."
+        :"Todavía quedan actividades pendientes en este módulo.";
+    });
+  });
+  document.querySelectorAll("[data-quiz]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const [i,j,k]=btn.dataset.quiz.split("-").map(Number);
+      if(!saved[i])saved[i]={checks:{},answers:{}};
+      if(!saved[i].answers)saved[i].answers={};
+      saved[i].answers[j]=k;
+      persist();
+      render();
+      const detail=document.getElementById("module-"+i);
+      if(detail)detail.open=true;
+    });
+  });
+  document.querySelectorAll(".next-module").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const i=Number(btn.dataset.next);
+      const next=document.getElementById("module-"+Math.min(i+1,modules.length-1));
+      if(!isDone(i)){
+        alert("Todavía tenés tareas pendientes. Completalas antes de avanzar.");
+        return;
+      }
+      if(i===modules.length-1){
+        alert("¡Terminaste todos los módulos! Hacé ahora un repaso general.");
+        return;
+      }
+      next.open=true;
+      next.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+  updateProgress();
+  updateFilterVisibility();
+}
+function updateFilterVisibility(){
+  document.querySelectorAll(".module").forEach((el,i)=>{
+    const show=filter==="all"||(filter==="done"&&isDone(i))||(filter==="pending"&&!isDone(i));
+    el.classList.toggle("hidden",!show);
+  });
+}
+document.querySelectorAll(".filter").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    filter=btn.dataset.filter;
+    document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b===btn));
+    updateFilterVisibility();
+  });
+});
+document.getElementById("openNext").addEventListener("click",()=>{
+  const i=modules.findIndex((m,j)=>!isDone(j));
+  if(i===-1){alert("¡Todos los módulos están completados!");return;}
+  const el=document.getElementById("module-"+i);
+  el.open=true;
+  el.scrollIntoView({behavior:"smooth",block:"start"});
+});
+document.getElementById("export").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify({modules:modules.map(m=>m.title),progress:saved},null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="mi-progreso-biologia.json";a.click();
+  URL.revokeObjectURL(url);
+});
+document.getElementById("reset").addEventListener("click",()=>{
+  if(confirm("¿Querés borrar todas las casillas y reiniciar tu progreso?")){
+    saved={};persist();render();
+  }
+});
+render();
+</script>
+</body>
+</html>
